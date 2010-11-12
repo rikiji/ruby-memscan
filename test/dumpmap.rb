@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #
-#      extconf.rb - 2010/11/12 15:31
+#      dumpmap.rb - 2010/11/12 15:31
 #      
 #      Copyright 2010 Riccardo Cecolin <rikiji@playkanji.com>
 #
@@ -20,5 +20,19 @@
 #      MA 02110-1301, USA.
 #
 
-require 'mkmf'
-create_makefile 'memscan'
+require 'pp'
+
+pid = ARGV[0].to_i
+
+f= File.open "/proc/#{pid}/cmdline"
+cmd= f.read.split "\0"
+
+sect= [cmd.first,"heap","stack"]
+
+f= File.open "/proc/#{pid}/maps"
+mem = Array.new
+f.each_line do |line|
+  mem << line.split(' ').first.split('-') if sect.any? { |s| line.match s }
+end
+
+pp mem
