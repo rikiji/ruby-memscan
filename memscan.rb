@@ -22,6 +22,7 @@
 
 require 'memscan.so'
 require 'hash-plus.rb'
+require 'format.rb'
 
 # Memscan usage
 # 
@@ -56,6 +57,10 @@ class Memscan
   end
 
   def search_long val
+    search_string [val].pack("i")
+  end
+  
+  def search_long_nocache val
     search_long_raw val
   end
 
@@ -70,8 +75,9 @@ class Memscan
         # pp key
         # pp pak.size
         pak.scan(s) do |t|
-          r << [@maps[key][segment].first, Regexp.last_match.offset(0).first]
-          # puts "found in #{key}"
+          match = Regexp.last_match.offset(0).first
+          r << [@maps[key][segment].first, match]
+          puts "DBG: found #{pak[match...match+(s.size)]} in #{key},#{segment}"
         end
         res += r if r.size > 0
         segment +=1
@@ -79,7 +85,7 @@ class Memscan
     end
     res
   end
-
+  
   def dump_stack
     dump if @cache.nil?
     @cache[:stack]

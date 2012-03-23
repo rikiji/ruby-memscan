@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #
-#      dev.rb - 2010/11/12 15:31
+#      test.rb - 2010/11/12 15:31
 #      
 #      Copyright 2010-2012 Riccardo Cecolin <r@rikiji.de>
 #
@@ -25,29 +25,22 @@ $LOAD_PATH << '..'
 require 'memscan'
 require 'pp'
 
+def format_results r
+  unless r.nil?
+    r.each do |m|
+      puts "0x%08x" % m     
+    end
+  end
+end
+
 m= Memscan.new
 
 pid= ARGV[0].to_i
 m.attach pid
 
-puts "stack segments: " + (m.dump_stack.size).to_s
-puts "heap segments: " + (m.dump_heap.size).to_s
-puts "data segments: " + (m.dump_data.size).to_s
+puts "stack size: " + (m.dump_stack.size * 4).to_s
+puts "heap size: " + (m.dump_heap.size * 4).to_s
+puts "data size: " + (m.dump_data.size * 4).to_s
 
-pp m.maps
-
-# format_dump m.dump_stack
-
-# search_string "foo"
-s = "ZOMBIES"
-puts "searching #{s}"
-r = m.search_string(s)
-pp r
-format_search(r)
-
-puts "searching deadbeef raw"
-format_a m.search_long_nocache 0xdeadbeef
-
-puts "searching deadbeef regexp"
-format_search m.search_long 0xdeadbeef
-
+format_results m.search_long 3735928559
+format_results m.search_long 3405691582

@@ -33,7 +33,8 @@ int foo()
 {
   
   unsigned int stackv = 0xcafebabe;
-  char * z = "ZOMBIES";  
+  int stack2v = 0xdeadbeef;
+  char z[] = "ZOMBIES";  
     fprintf(stderr,"values: %p %s\n",z,z);
     while (1)  {
       printf("data  %p: 0x%x\n"

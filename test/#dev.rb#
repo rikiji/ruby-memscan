@@ -30,24 +30,15 @@ m= Memscan.new
 pid= ARGV[0].to_i
 m.attach pid
 
-puts "stack segments: " + (m.dump_stack.size).to_s
-puts "heap segments: " + (m.dump_heap.size).to_s
-puts "data segments: " + (m.dump_data.size).to_s
-
-pp m.maps
+puts "stack size: " + (m.dump_stack.size * 4).to_s
+puts "heap size: " + (m.dump_heap.size * 4).to_s
+puts "data size: " + (m.dump_data.size * 4).to_s
 
 # format_dump m.dump_stack
 
 # search_string "foo"
-s = "ZOMBIES"
-puts "searching #{s}"
-r = m.search_string(s)
+r = m.search_string("ZOMBIES")
 pp r
 format_search(r)
-
-puts "searching deadbeef raw"
-format_a m.search_long_nocache 0xdeadbeef
-
-puts "searching deadbeef regexp"
-format_search m.search_long 0xdeadbeef
-
+#format_r m.search_long 3735928559
+#format_r m.search_long 3405691582

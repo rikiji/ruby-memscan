@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #
-#      dev.rb - 2010/11/12 15:31
+#      shell.rb - 2012/03/23 19:36
 #      
 #      Copyright 2010-2012 Riccardo Cecolin <r@rikiji.de>
 #
@@ -25,29 +25,59 @@ $LOAD_PATH << '..'
 require 'memscan'
 require 'pp'
 
+def format_a r
+  unless r.nil?
+    n = 0
+    r.each do |m|
+      print "0x%08x " % m
+      n += 1
+      puts if (n %= 4).zero?
+    end
+  end
+end
+
+def format_dump r
+  unless r.nil?
+    n = 0
+    r.keys.sort.each do |k|
+      print "0x%08x: " % k if (n %= 4).zero?
+      print "%08x " % r[k]
+      n += 1
+      puts if (n %= 4).zero?
+    end
+  end
+end
+
+def format_search r
+  unless r.nil?
+    r.each do |v|
+      puts "0x%08x" % (v[0] + v[1])
+    end
+  end
+end
+
 m= Memscan.new
 
 pid= ARGV[0].to_i
 m.attach pid
 
-puts "stack segments: " + (m.dump_stack.size).to_s
-puts "heap segments: " + (m.dump_heap.size).to_s
-puts "data segments: " + (m.dump_data.size).to_s
-
-pp m.maps
+puts "stack size: " + (m.dump_stack.size * 4).to_s
+puts "heap size: " + (m.dump_heap.size * 4).to_s
+puts "data size: " + (m.dump_data.size * 4).to_s
 
 # format_dump m.dump_stack
 
 # search_string "foo"
-s = "ZOMBIES"
-puts "searching #{s}"
-r = m.search_string(s)
-pp r
-format_search(r)
 
-puts "searching deadbeef raw"
-format_a m.search_long_nocache 0xdeadbeef
+while true do
+  print "search value: "
+  val= $stdin.gets.to_i(16)
+  format_a m.search_long val
+  puts
+end
 
-puts "searching deadbeef regexp"
-format_search m.search_long 0xdeadbeef
 
+#r = m.search_string("ZOMBIES")
+#pp r
+#format_search(r)
+#format_r m.search_long 3405691582
