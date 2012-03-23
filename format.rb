@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #
-#      dev.rb - 2010/11/12 15:31
+#      format.rb - 2012/03/23 20:07
 #      
 #      Copyright 2010-2012 Riccardo Cecolin <r@rikiji.de>
 #
@@ -20,25 +20,35 @@
 #      MA 02110-1301, USA.
 #
 
-$LOAD_PATH << '..'
+def format_a r
+  unless r.nil?
+    n = 0
+    r.each do |m|
+      print "0x%08x " % m
+      n += 1
+      puts if (n %= 4).zero?
+    end
+    puts unless (n %= 4).zero?
+  end
+end
 
-require 'memscan'
-require 'pp'
+def format_dump r
+  unless r.nil?
+    n = 0
+    r.keys.sort.each do |k|
+      print "0x%08x: " % k if (n %= 4).zero?
+      print "%08x " % r[k]
+      n += 1
+      puts if (n %= 4).zero?
+    end
+  end
+end
 
-m= Memscan.new
+def format_search r
+  unless r.nil?
+    r.each do |v|
+      puts "0x%08x" % (v[0] + v[1])
+    end
+  end
+end
 
-pid= ARGV[0].to_i
-m.attach pid
-
-puts "stack size: " + (m.dump_stack.size * 4).to_s
-puts "heap size: " + (m.dump_heap.size * 4).to_s
-puts "data size: " + (m.dump_data.size * 4).to_s
-
-# format_dump m.dump_stack
-
-# search_string "foo"
-r = m.search_string("ZOMBIES")
-pp r
-format_search(r)
-#format_r m.search_long 3735928559
-#format_r m.search_long 3405691582
