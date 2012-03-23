@@ -25,17 +25,20 @@ int datav = 0xdeadbeef;
 
 int main (int argc, char ** argv)
 {
-	printf("pid: %d\n",getpid());
-	foo();
+  printf("pid: %d\n",getpid());
+  foo();
 }
 
 int foo()
 {
-	int stackv = 0xcafebabe;
-		while (1)  {
-			printf("data  %p: 0x%x\n"
-				   "stack %p: 0x%x\n"
-				   "\n", &datav, datav, &stackv, stackv);
-			sleep(1);
-		}
+  
+  unsigned int stackv = 0xcafebabe;
+  char * z = "ZOMBIES";  
+    fprintf(stderr,"values: %p %s\n",z,z);
+    while (1)  {
+      printf("data  %p: 0x%x\n"
+	     "stack %p: 0x%x\n"
+	     "\n", &datav, datav, &stackv, stackv);
+      sleep(1);      
+    }
 }
