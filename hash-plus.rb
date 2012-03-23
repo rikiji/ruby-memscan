@@ -2,7 +2,7 @@
 #
 #      memscan.rb - 2012/02/01 01:27
 #      
-#      Copyright 2012 Riccardo Cecolin <rb@rikiji.it>
+#      Copyright 2012 Riccardo Cecolin <r@rikiji.de>
 #
 #      This program is free software; you can redistribute it and/or modify
 #      it under the terms of the GNU General Public License as published by
