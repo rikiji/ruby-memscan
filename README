@@ -1,6 +1,7 @@
 MEMSCAN
+-------
 
-Riccardo Cecolin <rikiji at playkanji dot com>
+*Riccardo Cecolin* <r at rikiji dot de>
 
 This ruby extension provides access to other processes memory from ruby scripts.
 Its development isn't completed (yet), although you can already have some fun with it. Check "test/test.rb" for sample usage.
